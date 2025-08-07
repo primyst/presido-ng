@@ -1,10 +1,13 @@
-import './globals.css';
-import { ReactNode } from 'react';
+import { GameProvider } from "@/context/GameContext";
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="font-sans bg-slate-900 text-white">{children}</body>
+      <body>
+        <GameProvider>
+          {children}
+        </GameProvider>
+      </body>
     </html>
   );
 }
