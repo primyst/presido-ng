@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Event } from "@/types/Event";
 import { initialState, applyEffects } from "@/lib/state";
 import events from "@/data/events";
 
