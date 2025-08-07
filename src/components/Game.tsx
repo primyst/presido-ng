@@ -1,65 +1,68 @@
-import React, { useState } from "react";
-
-type Stats = {
-  population: number;
-  economy: number;
-  happiness: number;
-  environment: number;
-};
+import { useState } from "react";
+import { events, applyEffects } from "../data/events";
 
 export default function Game() {
-  const [turn, setTurn] = useState(1);
-  const [stats, setStats] = useState<Stats>({
-    population: 1000000,
-    economy: 50,
-    happiness: 50,
-    environment: 50,
-  });
+  const [round, setRound] = useState(0);
+  const [money, setMoney] = useState(100);
+  const [resources, setResources] = useState(100);
+  const [gameOver, setGameOver] = useState(false);
 
-  const handleAction = (type: keyof Stats, value: number) => {
-    setStats((prev) => ({
-      ...prev,
-      [type]: Math.min(100, Math.max(0, prev[type] + value)),
-    }));
-    setTurn((prev) => prev + 1);
+  const currentEvent = events[round];
+
+  const handleDecision = (choice: "optionA" | "optionB") => {
+    const newStats = applyEffects(
+      money,
+      resources,
+      currentEvent,
+      choice
+    );
+    setMoney(newStats.money);
+    setResources(newStats.resources);
+
+    if (round >= events.length - 1) {
+      setGameOver(true);
+    } else {
+      setRound((prev) => prev + 1);
+    }
   };
 
+  if (gameOver) {
+    return (
+      <div className="text-center mt-20">
+        <h1 className="text-3xl font-bold mb-4">Game Over</h1>
+        <p className="text-lg">Final Money: ${money}</p>
+        <p className="text-lg">Final Resources: {resources}</p>
+      </div>
+    );
+  }
+
   return (
-    <main className="p-6 space-y-6 max-w-3xl mx-auto">
-      <div className="text-center text-lg font-semibold">
-        Turn {turn}
+    <div className="max-w-xl mx-auto mt-20 p-4 border rounded shadow">
+      <div className="mb-4">
+        <p><strong>Round:</strong> {round + 1}/10</p>
+        <p><strong>Money:</strong> ${money}</p>
+        <p><strong>Resources:</strong> {resources}</p>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 text-center">
-        <StatCard label="Population" value={stats.population.toLocaleString()} />
-        <StatCard label="Economy" value={stats.economy} />
-        <StatCard label="Happiness" value={stats.happiness} />
-        <StatCard label="Environment" value={stats.environment} />
+      <div className="mb-6">
+        <h2 className="text-xl font-semibold mb-2">Event</h2>
+        <p className="italic">{currentEvent.description}</p>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        <button onClick={() => handleAction("economy", 10)} className="action-btn">
-          Boost Economy
+      <div className="space-y-2">
+        <button
+          onClick={() => handleDecision("optionA")}
+          className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
+        >
+          {currentEvent.optionA.label}
         </button>
-        <button onClick={() => handleAction("happiness", 10)} className="action-btn">
-          Improve Happiness
-        </button>
-        <button onClick={() => handleAction("environment", 10)} className="action-btn">
-          Clean Environment
-        </button>
-        <button onClick={() => handleAction("population", 100000)} className="action-btn">
-          Attract Population
+        <button
+          onClick={() => handleDecision("optionB")}
+          className="w-full bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded"
+        >
+          {currentEvent.optionB.label}
         </button>
       </div>
-    </main>
-  );
-}
-
-function StatCard({ label, value }: { label: string; value: number | string }) {
-  return (
-    <div className="bg-white shadow-md rounded-lg p-4">
-      <h3 className="text-md font-semibold">{label}</h3>
-      <p className="text-xl font-bold">{value}</p>
     </div>
   );
 }
