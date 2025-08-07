@@ -42,35 +42,4 @@ export default function Game() {
       <Footer />
     </div>
   );
-}  }
-
-  return (
-    <div className="max-w-xl mx-auto mt-20 p-4 border rounded shadow">
-      <div className="mb-4">
-        <p><strong>Round:</strong> {round + 1}/10</p>
-        <p><strong>Money:</strong> ${money}</p>
-        <p><strong>Resources:</strong> {resources}</p>
-      </div>
-
-      <div className="mb-6">
-        <h2 className="text-xl font-semibold mb-2">Event</h2>
-        <p className="italic">{currentEvent.description}</p>
-      </div>
-
-      <div className="space-y-2">
-        <button
-          onClick={() => handleDecision("optionA")}
-          className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
-        >
-          {currentEvent.optionA.label}
-        </button>
-        <button
-          onClick={() => handleDecision("optionB")}
-          className="w-full bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded"
-        >
-          {currentEvent.optionB.label}
-        </button>
-      </div>
-    </div>
-  );
 }
