@@ -4,7 +4,6 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import EventCard from "@/components/EventCard";
 import GameDashboard from "@/components/GameDashboard";
-import { useGameContext } from "@/context/GameContext";
 import { scenarios } from "@/data/scenarios";
 import { events } from "@/data/events";
 
